@@ -1,0 +1,7 @@
+有些车辆需要押金，比亚迪的车辆都要交10000的押金。
+
+从Car类衍生一个子类ValueCar，ValueCar多一个押金属性。
+
+改写calcTotal方法，计算总费用时加上押金。
+
+重写Car和ValueCar的toString方法，ValueCar显示时要有押金
