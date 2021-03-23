@@ -1,9 +1,13 @@
-package day02;
+package car;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class TeacherCarLease {
-
+	static boolean firstLogin = true;//是否第一次登录
+	static List<String> CarList = new ArrayList<String>();//现有车列表
+	static List<String> rentCarList = new ArrayList<String>();//借出车列表
 	static Scanner sc = new Scanner(System.in);
 	
 	public static void main(String[] args) {
@@ -18,6 +22,7 @@ public class TeacherCarLease {
 					rentCar();
 					continue;
 				}else if (choose == 2) {
+					RerurnCar();
 					System.out.println("还车成功，费用将自动扣除！");
 					continue;
 				}else if (choose == 0) {
@@ -32,24 +37,54 @@ public class TeacherCarLease {
 	
 	public static void rentCar() {
 		String[] cars = {"比亚迪汉-300","吉利星瑞-200","五菱凯捷-250","五菱宏光mini-100","比亚迪秦-180"};
+		
+		if(firstLogin) {
+			firstLogin = false;
 		for(int i=0; i<5; i++) {
-			System.out.println("("+ (i+1) +")" + cars[i]);
+			CarList.add(cars[i]);
+			
+		}
+		}
+		if(CarList.size()==0) {
+			System.out.println("暂无车");
+			return;
+		}
+		for(int i=0; i<CarList.size(); i++) {
+		System.out.println("("+ (i+1) +")" + CarList.get(i));
 		}
 		System.out.println("请选择您要租的车型：");
 		int carno = sc.nextInt();
 		sc.nextLine();
 		
+		
 		System.out.println("您需要租用多少天？");
 		int days = sc.nextInt();
 		sc.nextLine();
 		
-		String car = cars[carno-1];
+		String car = CarList.get(carno-1);
 		String[] info = car.split("-");
 		int price = Integer.parseInt(info[1]); //单日租金
-//		int total = price * days;  //交费总金额
-		Car Ccar = new Car(info[0],price);
-		System.out.println("您选择的车型是"+Ccar.getType()+", 共需交费"+Ccar.calcTotal(days)+"元！");
-
+		int total = price * days;  //交费总金额
+		System.out.println("您选择的车型是"+info[0]+", 共需交费"+total+"元！");
+		rentCarList.add(CarList.get(carno-1));
+		CarList.remove(carno-1);
+	}
+	
+	public static void RerurnCar() {
+		if(rentCarList.size()!=0) {
+		System.out.println("您已租用的车辆有：");}
+		for(int i=0; i<rentCarList.size(); i++) {
+			System.out.println("("+ (i+1) +")" + rentCarList.get(i));
+			}
+		if(rentCarList.size()==0) {
+			System.out.println("您无需还车");
+			return;
+		}
+		System.out.println("请选择您要还的车型：");
+		int returnCar = sc.nextInt();
+		sc.nextLine();
+		CarList.add(rentCarList.get(returnCar-1));
+		rentCarList.remove(returnCar-1);
 	}
 	
 	public static int chooseMenu() {
